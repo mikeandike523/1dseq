@@ -1,20 +1,20 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
-import parseDataText, { type SequenceData } from './utils/parseDataText';
-import useMeasureElement from './hooks/fwk/useMeasureElement';
-import {Div} from "style-props-html"
+import React, { useRef, useState, useCallback, useEffect } from "react";
+import parseDataText, { type SequenceData } from "./utils/parseDataText";
+import useMeasureElement from "./hooks/fwk/useMeasureElement";
+import { Div } from "style-props-html";
+import YourChart from "./components/YourChart";
+
+import Plot from "react-plotly.js";
 
 export default function App() {
-
-
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const rightPaneRef = useRef<HTMLDivElement>(null);
 
   const rightPaneSize = useMeasureElement(rightPaneRef);
-  const rightPaneWidth = rightPaneSize?.width ?? 0
-  const rightPaneHeight = rightPaneSize?.height?? 0
-
+  const rightPaneWidth = rightPaneSize?.width ?? 0;
+  const rightPaneHeight = rightPaneSize?.height ?? 0;
 
   const [data, setData] = useState<SequenceData<number | Date> | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -28,7 +28,7 @@ export default function App() {
         setData(seq);
       } catch (err: any) {
         console.error(err);
-        alert(err?.message || 'Error parsing data');
+        alert(err?.message || "Error parsing data");
       }
     };
     reader.readAsText(file);
@@ -39,13 +39,16 @@ export default function App() {
   }, []);
 
   // Stabilize these so the effect doesn’t re-register every render
-  const onDrop = useCallback((e: DragEvent) => {
-    e.preventDefault();
-    if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
-      handleFile(e.dataTransfer.files[0]);
-      e.dataTransfer.clearData();
-    }
-  }, [handleFile]);
+  const onDrop = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+        e.dataTransfer.clearData();
+      }
+    },
+    [handleFile]
+  );
 
   const onDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
@@ -54,11 +57,11 @@ export default function App() {
   useEffect(() => {
     const div = dropRef.current;
     if (!div) return;
-    div.addEventListener('dragover', onDragOver as any);
-    div.addEventListener('drop', onDrop as any);
+    div.addEventListener("dragover", onDragOver as any);
+    div.addEventListener("drop", onDrop as any);
     return () => {
-      div.removeEventListener('dragover', onDragOver as any);
-      div.removeEventListener('drop', onDrop as any);
+      div.removeEventListener("dragover", onDragOver as any);
+      div.removeEventListener("drop", onDrop as any);
     };
   }, [onDragOver, onDrop]);
 
@@ -75,25 +78,28 @@ export default function App() {
         ref={dropRef}
         onClick={onClick}
         style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          cursor: 'pointer',
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          cursor: "pointer",
         }}
       >
         <input
           ref={fileInputRef}
           type="file"
           accept=".csv,.tsv,text/csv,text/tab-separated-values"
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
           onChange={(e) => {
             const f = e.target.files?.[0];
             if (f) handleFile(f);
           }}
         />
-        <p>Please drag and drop a csv or tsv file, or click here to open file picker.</p>
+        <p>
+          Please drag and drop a csv or tsv file, or click here to open file
+          picker.
+        </p>
       </div>
     );
   }
@@ -109,30 +115,32 @@ export default function App() {
   );
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div style={{ display: "flex", height: "100vh" }}>
       <div
         ref={listRef}
         style={{
-          width: '25%',
-          height: '100%',
-          overflow: 'auto',
-          borderRight: '1px solid #ccc',
+          width: "25%",
+          height: "100%",
+          overflow: "auto",
+          borderRight: "1px solid #ccc",
         }}
         onScroll={onScroll}
       >
-        <div style={{ position: 'relative', height: totalHeight, width: '100%' }}>
+        <div
+          style={{ position: "relative", height: totalHeight, width: "100%" }}
+        >
           <div
             style={{
-              display: 'flex',
-              position: 'sticky',
+              display: "flex",
+              position: "sticky",
               top: 0,
-              background: '#f0f0f0',
-              fontWeight: 'bold',
+              background: "#f0f0f0",
+              fontWeight: "bold",
               zIndex: 1,
             }}
           >
-            <div style={{ flex: 1, padding: '4px' }}>{data.timeAxisName}</div>
-            <div style={{ flex: 1, padding: '4px' }}>{data.valueAxisName}</div>
+            <div style={{ flex: 1, padding: "4px" }}>{data.timeAxisName}</div>
+            <div style={{ flex: 1, padding: "4px" }}>{data.valueAxisName}</div>
           </div>
           {data.dataPoints.slice(startIndex, endIndex).map(([x, y], idx) => {
             const rowIndex = startIndex + idx;
@@ -140,28 +148,39 @@ export default function App() {
               <div
                 key={rowIndex}
                 style={{
-                  display: 'flex',
-                  position: 'absolute',
+                  display: "flex",
+                  position: "absolute",
                   top: rowIndex * rowHeight,
                   height: rowHeight,
-                  width: '100%',
+                  width: "100%",
                 }}
               >
-                <div style={{ flex: 1, padding: '4px' }}>
+                <div style={{ flex: 1, padding: "4px" }}>
                   {x instanceof Date ? x.toISOString() : x}
                 </div>
-                <div style={{ flex: 1, padding: '4px' }}>{y}</div>
+                <div style={{ flex: 1, padding: "4px" }}>{y}</div>
               </div>
             );
           })}
         </div>
       </div>
-      <div style={{ flex: 1 }} ref={rightPaneRef}>{
-        rightPaneWidth && rightPaneHeight && <>
-        <Div width={`${rightPaneWidth}px`} height={`${rightPaneHeight}px`} overflow="auto">
-          {/* Plot goes here */}
-        </Div>
-        </>}</div>
+      <div style={{ flex: 1 }} ref={rightPaneRef}>
+        {rightPaneWidth && rightPaneHeight && (
+          <>
+            <Div
+              width={`${rightPaneWidth}px`}
+              height={`${rightPaneHeight}px`}
+              overflow="auto"
+            >
+              <YourChart
+                data={data}
+                rightPaneWidth={rightPaneWidth}
+                rightPaneHeight={rightPaneHeight}
+              />
+            </Div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
