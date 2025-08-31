@@ -1,10 +1,9 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
-import parseDataText, { type SequenceData } from "./utils/parseDataText";
-import useMeasureElement from "./hooks/fwk/useMeasureElement";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Div } from "style-props-html";
 import YourChart from "./components/YourChart";
+import useMeasureElement from "./hooks/fwk/useMeasureElement";
+import parseDataText, { type SequenceData } from "./utils/parseDataText";
 
-import Plot from "react-plotly.js";
 
 export default function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
