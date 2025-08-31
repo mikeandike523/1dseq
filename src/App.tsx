@@ -2,9 +2,13 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import parseDataText, { type SequenceData } from './utils/parseDataText';
 
 export default function App() {
+  // ⬇️ Hooks must be unconditional, at the top
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
   const [data, setData] = useState<SequenceData<number | Date> | null>(null);
+  const [scrollTop, setScrollTop] = useState(0);
 
   const handleFile = useCallback((file: File) => {
     const reader = new FileReader();
@@ -15,27 +19,28 @@ export default function App() {
         setData(seq);
       } catch (err: any) {
         console.error(err);
-        alert(err.message || 'Error parsing data');
+        alert(err?.message || 'Error parsing data');
       }
     };
     reader.readAsText(file);
   }, []);
 
-  const onClick = () => {
+  const onClick = useCallback(() => {
     fileInputRef.current?.click();
-  };
+  }, []);
 
-  const onDrop = (e: DragEvent) => {
+  // Stabilize these so the effect doesn’t re-register every render
+  const onDrop = useCallback((e: DragEvent) => {
     e.preventDefault();
     if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
       handleFile(e.dataTransfer.files[0]);
       e.dataTransfer.clearData();
     }
-  };
+  }, [handleFile]);
 
-  const onDragOver = (e: DragEvent) => {
+  const onDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
-  };
+  }, []);
 
   useEffect(() => {
     const div = dropRef.current;
@@ -48,6 +53,13 @@ export default function App() {
     };
   }, [onDragOver, onDrop]);
 
+  const rowHeight = 30;
+
+  const onScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    setScrollTop(e.currentTarget.scrollTop);
+  }, []);
+
+  // If no data yet, render the drop zone / file picker
   if (!data) {
     return (
       <div
@@ -68,36 +80,29 @@ export default function App() {
           accept=".csv,.tsv,text/csv,text/tab-separated-values"
           style={{ display: 'none' }}
           onChange={(e) => {
-            if (e.target.files?.[0]) {
-              handleFile(e.target.files[0]);
-            }
+            const f = e.target.files?.[0];
+            if (f) handleFile(f);
           }}
         />
-        <p>
-          Please drag and drop a csv or tsv file, or click here to open file picker.
-        </p>
+        <p>Please drag and drop a csv or tsv file, or click here to open file picker.</p>
       </div>
     );
   }
 
-  // Basic virtualized table with manual windowing
-  const rowHeight = 30;
+  // Virtualization math
   const totalRows = data.dataPoints.length;
   const totalHeight = totalRows * rowHeight;
-
-  const [scrollTop, setScrollTop] = useState(0);
-  const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setScrollTop(e.currentTarget.scrollTop);
-  };
+  const viewportHeight = listRef.current?.clientHeight ?? window.innerHeight;
   const startIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - 5);
   const endIndex = Math.min(
     totalRows,
-    Math.ceil((scrollTop + window.innerHeight) / rowHeight) + 5
+    Math.ceil((scrollTop + viewportHeight) / rowHeight) + 5
   );
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <div
+        ref={listRef}
         style={{
           width: '50%',
           height: '100%',
@@ -114,6 +119,7 @@ export default function App() {
               top: 0,
               background: '#f0f0f0',
               fontWeight: 'bold',
+              zIndex: 1,
             }}
           >
             <div style={{ flex: 1, padding: '4px' }}>{data.timeAxisName}</div>
@@ -141,9 +147,7 @@ export default function App() {
           })}
         </div>
       </div>
-      <div style={{ flex: 1 }}>
-        {/* TODO: add right side content */}
-      </div>
+      <div style={{ flex: 1 }}>{/* TODO: add right side content */}</div>
     </div>
   );
 }
