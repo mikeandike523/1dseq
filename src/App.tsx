@@ -1,11 +1,20 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import parseDataText, { type SequenceData } from './utils/parseDataText';
+import useMeasureElement from './hooks/fwk/useMeasureElement';
+import {Div} from "style-props-html"
 
 export default function App() {
-  // ⬇️ Hooks must be unconditional, at the top
+
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const rightPaneRef = useRef<HTMLDivElement>(null);
+
+  const rightPaneSize = useMeasureElement(rightPaneRef);
+  const rightPaneWidth = rightPaneSize?.width ?? 0
+  const rightPaneHeight = rightPaneSize?.height?? 0
+
 
   const [data, setData] = useState<SequenceData<number | Date> | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -104,7 +113,7 @@ export default function App() {
       <div
         ref={listRef}
         style={{
-          width: '50%',
+          width: '25%',
           height: '100%',
           overflow: 'auto',
           borderRight: '1px solid #ccc',
@@ -147,7 +156,12 @@ export default function App() {
           })}
         </div>
       </div>
-      <div style={{ flex: 1 }}>{/* TODO: add right side content */}</div>
+      <div style={{ flex: 1 }} ref={rightPaneRef}>{
+        rightPaneWidth && rightPaneHeight && <>
+        <Div width={`${rightPaneWidth}px`} height={`${rightPaneHeight}px`} overflow="auto">
+          {/* Plot goes here */}
+        </Div>
+        </>}</div>
     </div>
   );
 }

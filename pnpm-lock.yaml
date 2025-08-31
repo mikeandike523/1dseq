@@ -11,12 +11,21 @@ importers:
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.1.12)(react@19.1.1)
+      '@types/lodash':
+        specifier: ^4.17.20
+        version: 4.17.20
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       react:
         specifier: ^19.1.1
         version: 19.1.1
       react-dom:
         specifier: ^19.1.1
         version: 19.1.1(react@19.1.1)
+      style-props-html:
+        specifier: ^0.0.8
+        version: 0.0.8(@emotion/react@11.14.0(@types/react@19.1.12)(react@19.1.1))(@types/lodash@4.17.20)(@types/react@19.1.12)(lodash@4.17.21)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
     devDependencies:
       '@eslint/js':
         specifier: ^9.33.0
@@ -568,6 +577,9 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
+  '@types/lodash@4.17.20':
+    resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
+
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
@@ -954,6 +966,9 @@ packages:
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
+  lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
@@ -1101,6 +1116,16 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  style-props-html@0.0.8:
+    resolution: {integrity: sha512-AV7bJ7tWtkyn6aYToWCwe1WwAYRU7gEAUQX/KW8Wqd+iAVISJU5iTSx3El7PmAPL7+hbC9jTdLqihh/ryBkULA==}
+    peerDependencies:
+      '@emotion/react': ^11.13.5
+      '@types/lodash': ^4.17.13
+      '@types/react': ^19.0.1
+      lodash: ^4.17.21
+      react: ^19.0.0
+      react-dom: ^19.0.0
 
   stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
@@ -1607,6 +1632,8 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/lodash@4.17.20': {}
+
   '@types/parse-json@4.0.2': {}
 
   '@types/react-dom@19.1.9(@types/react@19.1.12)':
@@ -2040,6 +2067,8 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
+  lodash@4.17.21: {}
+
   merge2@1.4.1: {}
 
   micromatch@4.0.8:
@@ -2180,6 +2209,15 @@ snapshots:
   source-map@0.5.7: {}
 
   strip-json-comments@3.1.1: {}
+
+  style-props-html@0.0.8(@emotion/react@11.14.0(@types/react@19.1.12)(react@19.1.1))(@types/lodash@4.17.20)(@types/react@19.1.12)(lodash@4.17.21)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      '@emotion/react': 11.14.0(@types/react@19.1.12)(react@19.1.1)
+      '@types/lodash': 4.17.20
+      '@types/react': 19.1.12
+      lodash: 4.17.21
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
 
   stylis@4.2.0: {}
 
